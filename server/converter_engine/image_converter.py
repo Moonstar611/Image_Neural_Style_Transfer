@@ -1,0 +1,3 @@
+
+class ImageConverter(object):
+    pass
