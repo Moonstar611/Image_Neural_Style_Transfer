@@ -1,5 +1,3 @@
-
-
 class RestResponse(object):
 
     def __init__(self, message=None, code=0):
@@ -14,5 +12,3 @@ class JobProgressInfo(object):
         self.status = status
         self.progress = progress
         self.converted_image_id = conv_img_id
-
-

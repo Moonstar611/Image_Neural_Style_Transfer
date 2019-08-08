@@ -1,8 +1,8 @@
-from models import ImageRepo, JobRepo, Image, Job
-from helpers import _JSONEncoder
-import os
 import json
+import os
 
+from helpers import _JSONEncoder
+from models.db_models import ImageRepo, JobRepo, Image, Job
 
 ORG_IMG_REPO_DIR = os.path.join('../storage/', 'org_img_repo.json')
 CONV_IMG_REPO_DIR = os.path.join('../storage/', 'conv_img_repo.json')

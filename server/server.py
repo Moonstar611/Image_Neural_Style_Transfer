@@ -1,8 +1,8 @@
-from flask import Flask, send_from_directory, request
-from repo_management import job_repo_service, original_image_repo_service, converted_image_repo_service
-import helpers
-import app_constants
+from flask import Flask, send_from_directory
+
 import api_registerer
+import app_constants
+
 APP_NAME = 'Image Styler'
 app = Flask(APP_NAME)
 

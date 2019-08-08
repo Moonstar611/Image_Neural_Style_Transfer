@@ -1,33 +1,56 @@
-import env_params
-import os
 import json
+import os
 from datetime import datetime
+
 from flask.wrappers import Response
 from werkzeug.utils import secure_filename
 
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in env_params.SUPPORTED_TYPE
+import app_constants
 
 
-def generate_img_file_name(filename):
-    dt_str = str(datetime.now())
-    return secure_filename(dt_str + '-' + filename)
+class FileNameUtils(object):
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def generate_file_name(filename):
+        dt_str = str(datetime.now())
+        return secure_filename(dt_str + '-' + filename)
+
+    @staticmethod
+    def original_image_path(filename):
+        return os.path.join(app_constants.ORIGINAL_IMAGE_PATH, filename)
+
+    @staticmethod
+    def converted_image_path(filename):
+        return os.path.join(app_constants.CONVERTED_IMAGE_PATH, filename)
+
+    @staticmethod
+    def is_allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1] in app_constants.SUPPORTED_TYPE
 
 
-def generate_file_path(filename):
-    return os.path.join(env_params.ORIGINAL_IMAGE_PATH, filename)
+class RestUtils(object):
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def response(body, status_code):
+        return Response(
+            response=json.dumps(body, cls=_JSONEncoder),
+            status=status_code,
+            mimetype='application/json'
+        )
 
 
-def response(body, code):
-    return Response(
-        response=json.dumps(body, cls=_JSONEncoder),
-        status=code,
-        mimetype='application/json'
-    )
+class HttpCode(object):
+    NOT_SUPPORTED = 415
+    NOT_FOUND = 404
+    INTERNAL_SERVER_ERROR = 500
+    OK = 200
 
-
-
+    def __init__(self):
+        pass
 
 
 class _JSONEncoder(json.JSONEncoder):
@@ -35,6 +58,7 @@ class _JSONEncoder(json.JSONEncoder):
         encoder for (1) datetime: not JSON serializable, encode to milli
         second format; (2) use __dict__ if it is not JSON serializable.
     """
+
     def default(self, obj):
         try:
             return json.JSONEncoder.default(self, obj)

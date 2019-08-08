@@ -1,13 +1,16 @@
 from flask import Flask, request
-import helpers
+
 import app_constants
-from repo_management import original_image_repo_service, converted_image_repo_service, job_repo_service
-from rest_models import RestResponse
-from db_models import Job
+from helpers import FileNameUtils, RestUtils, HttpCode
+from models.db_models import Job
+from models.rest_models import RestResponse
+from repo_management import job_repo_service as jrs
+from repo_management import original_image_repo_service as oirs
+from repo_management import converted_image_repo_service as cirs
+from
 
 
 def register(app: Flask):
-
     @app.route('/api/rest/img/upload', methods=['POST'])
     def upload_original_img():
         """
@@ -16,13 +19,13 @@ def register(app: Flask):
         :type: flask.wrappers.Response with body: rest_models.RestResponse
         """
         f = request.files['file']
-        if not helpers.allowed_file(f.filename):
+        if not FileNameUtils.is_allowed_file(f.filename):
             error_msg = 'Not supported file type: '.format(f.filename)
-            return helpers.response(RestResponse(error_msg, 1), 415)
-        filename = helpers.generate_img_file_name(f.filename)
-        f.save(helpers.generate_file_path(filename))
-        image_id = original_image_repo_service.add_new_image_file(filename)
-        return helpers.response(RestResponse(image_id), 200)
+            return RestUtils.response(RestResponse(error_msg, 1), HttpCode.NOT_SUPPORTED)
+        filename = FileNameUtils.generate_file_name(f.filename)
+        f.save(FileNameUtils.original_image_path(filename))
+        image_id = oirs.add_new_image_file(filename)
+        return RestUtils.response(RestResponse(image_id), HttpCode.OK)
 
     @app.route('/api/rest/job/start', methods=['POST'])
     def start_job():
@@ -35,7 +38,7 @@ def register(app: Flask):
         job_type = req_data['type']
         img_id = req_data['img_id']
         new_job = Job(job_type, img_id)
-        job_repo_service.add_job(new_job)
+        jrs.add_job(new_job)
         # TODO:
         # job_id = job_manager
 

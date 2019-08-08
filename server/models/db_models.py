@@ -95,7 +95,6 @@ class JobRepo(object):
 
 
 class Job(object):
-
     class JobType(object):
         TYPE_1 = '1'
         TYPE_2 = '2'
@@ -106,8 +105,10 @@ class Job(object):
         NOT_STARTED = 'NOT STARTED'
         RUNNING = 'RUNNING'
         FINISHED = 'FINISHED'
+        FAILED = 'FAILED'
 
-    def __init__(self, job_type, org_img_id, conv_img_id=None, job_id=None, job_status=JobStatus.NOT_STARTED, job_progress=0):
+    def __init__(self, job_type, org_img_id, conv_img_id=None, job_id=None, job_status=JobStatus.NOT_STARTED,
+                 job_progress=0):
         self.type = job_type
         self.original_image_id = org_img_id
         self.converted_image_id = conv_img_id
