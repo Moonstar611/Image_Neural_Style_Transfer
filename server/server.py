@@ -55,4 +55,4 @@ def upload_file():
 api_registerer.register(app)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

@@ -20,24 +20,31 @@ class ImageRepo(object):
             if image_name == image.name:
                 self.images.remove(image)
                 self._update_time()
+        raise ValueError("Cannot find image with name: {}".format(image_name))
 
     def delete_image_by_id(self, image_id):
         for image in self.images:
             if image_id == image.image_id:
                 self.images.remove(image)
                 self._update_time()
+        raise ValueError("Cannot find image with id: {}".format(image_id))
 
     def find_image_by_name(self, image_name):
-        pass
+        for image in self.images:
+            if image_name == image.name:
+                return image
+        raise ValueError("Cannot find image with name: {}".format(image_name))
 
     def find_image_by_id(self, image_id):
-        pass
+        for image in self.images:
+            if image_id == image.image_id:
+                return image
+        raise ValueError("Cannot find image with id: {}".format(image_id))
 
     def _update_time(self):
         self.time = str(datetime.datetime.now())
 
     def _generate_id(self):
-        print(self.images)
         image_ids = [image.image_id for image in self.images]
         if len(image_ids) == 0:
             return 1
@@ -69,27 +76,40 @@ class JobRepo(object):
         new_job.job_id = self._generate_id()
         self.jobs.append(new_job)
         self._update_time()
+        return new_job.job_id
 
     def delete_job_by_id(self, job_id):
         for job in self.jobs:
             if job_id == job.job_id:
                 self.jobs.remove(job)
                 self._update_time()
+        raise ValueError("Cannot find job with id: {}".format(job_id))
 
     def find_job_by_id(self, job_id):
-        pass
+        for job in self.jobs:
+            if job_id == job.job_id:
+                return job
+        raise ValueError("Cannot find job with id: {}".format(job_id))
 
     def find_job_by_org_image_id(self, original_image_id):
-        pass
+        for job in self.jobs:
+            if original_image_id == job.original_image_id:
+                return job
+        raise ValueError("Cannot find job with original image id: {}".format(original_image_id))
 
     def find_job_by_conv_image_id(self, converted_image_id):
-        pass
+        for job in self.jobs:
+            if converted_image_id == job.converted_image_id:
+                return job
+        raise ValueError("Cannot find job with converted image id: {}".format(converted_image_id))
 
     def _update_time(self):
         self.time = str(datetime.datetime.now())
 
     def _generate_id(self):
         job_ids = [job.job_id for job in self.jobs]
+        if len(job_ids) == 0:
+            return 1
         job_ids.sort()
         return job_ids[-1] + 1
 
@@ -118,8 +138,9 @@ class Job(object):
 
     @staticmethod
     def create_job_from_json(json_obj):
-        return Job(json_obj['job_type'],
-                   json_obj['image_id'],
+        return Job(json_obj['type'],
+                   json_obj['original_image_id'],
+                   json_obj['converted_image_id'],
                    json_obj['job_id'],
                    json_obj['status'],
                    json_obj['progress'])
