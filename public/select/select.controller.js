@@ -7,7 +7,7 @@ define(['_setup/angular-core-object'], function(CoreObject) {
             this.$cookies = $cookies;
             this.localStorage = localStorage;
             this.selections = [
-                {name: "Stary Night - Van Gogh", id: 0, url: this.PIC_URL_TEMPLATE + "stary_night.jpg"},
+                {name: "Starry Night - Van Gogh", id: 0, url: this.PIC_URL_TEMPLATE + "starry_night.jpg"},
                 {name: "Impression, Sunrise - Claude Monet", id: 1, url: this.PIC_URL_TEMPLATE + "sun_rise.jpg"},
                 {name: "Liberty Leading The People - Eugene Delacroix", id: 2, url: this.PIC_URL_TEMPLATE + "liberty_leading_the_people.jpg"},
                 {name: "Girl Before A Mirror - Pablo Picasso", id: 3, url: this.PIC_URL_TEMPLATE + "girl_before_a_mirror.jpg"}
