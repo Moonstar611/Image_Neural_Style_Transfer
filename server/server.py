@@ -33,6 +33,7 @@ def send_public(filename):
     :param filename: the path to the public file being requested
     :return: the public file being requested
     """
+    print(filename)
     return send_from_directory(app_constants.PUBLIC_PATH, filename)
 
 
@@ -45,6 +46,15 @@ def send_converted_image(image_name):
     """
     return send_from_directory(app_constants.CONVERTED_IMAGE_PATH, image_name)
 
+
+@app.route('/image/original/<path:image_name>')
+def send_original_image(image_name):
+    """
+    Send the original image as a static file
+    :param image_name: file name of original image
+    :return: the original image file being requested
+    """
+    return send_from_directory(app_constants.ORIGINAL_IMAGE_PATH, image_name)
 
 # test
 @app.route('/upload')

@@ -13,6 +13,7 @@ from job_management import get_job_manager
 def register(app: Flask):
 
     job_manager = get_job_manager(jrs, oirs, cirs)
+    print("????")
     @app.route('/api/rest/img/upload', methods=['POST'])
     def upload_original_img():
         """
@@ -21,6 +22,7 @@ def register(app: Flask):
         :type: flask.wrappers.Response with body: rest_models.RestResponse
         """
         f = request.files['file']
+        print(type(f))
         if not FileNameUtils.is_allowed_file(f.filename):
             error_msg = 'Not supported file type: '.format(f.filename)
             return RestUtils.response(RestResponse(error_msg, 1), HttpCode.NOT_SUPPORTED)
@@ -60,8 +62,22 @@ def register(app: Flask):
         body = JobProgressInfo(job.job_id, job.status, job.progress, job.converted_image_id)
         return RestUtils.response(body, HttpCode.OK)
 
-    @app.route('/api/rest/img/download/<int:converted_img_id>', methods=['GET'])
-    def get_converted_image(converted_img_id):
+    @app.route('/api/rest/img/original/<int:original_img_id>', methods=['GET'])
+    def get_original_image_url(original_img_id):
+        """
+        Get the original image
+        :param original_img_id: id of the converted image, previously returned by job api
+        :return: response body with converted image file path
+        :type: flask.wrappers.Response with body: rest_models.RestResponse
+        """
+        image = oirs.find_image_by_id(original_img_id)
+        file_name = image.name
+        url = app_constants.ORIGINAL_IMAGE_URL_TEMP.format(file_name)
+        body = RestResponse(url)
+        return RestUtils.response(body, HttpCode.OK)
+
+    @app.route('/api/rest/img/converted/<int:converted_img_id>', methods=['GET'])
+    def get_converted_image_url(converted_img_id):
         """
         Get the converted image
         :param converted_img_id: id of the converted image, previously returned by job api

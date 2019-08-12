@@ -1,0 +1,9 @@
+<select ng-model="ctrl.curSelectionId">
+        <option ng-repeat="sel in ctrl.selections" value="{{sel.id}}">{{sel.name}}</option>
+</select>
+<div ng-repeat="pic in ctrl.selections" ng-show="ctrl.showPic(pic.id)" >
+    <img ng-src="{{pic.url}}" alt="{{pic.name}}" />
+</div>
+<button 
+    type="button"
+    ng-click="ctrl.goToUpload()">NEXT</button>
