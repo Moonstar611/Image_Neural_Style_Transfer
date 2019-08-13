@@ -62,14 +62,6 @@ define(['_setup/angular-core-object'], function(CoreObject) {
             )
         },
 
-        // saveOrgPic: function() {
-        //     this.$cookies.put('originalPic', JSON.stringify(this.originalPic));
-        // },
-
-        // loadOrgPic: function() {
-        //     return JSON.parse(this.$cookies.get('originalPic')) || {id: 0, url: ""};
-        // },
-
         saveOrgPic: function() {
             this.localStorage.setItem('originalPic', JSON.stringify(this.originalPic));
         },

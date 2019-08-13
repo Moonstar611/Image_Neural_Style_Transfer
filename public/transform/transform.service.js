@@ -1,38 +1,32 @@
 define(['_setup/angular-core-object'], function(CoreObject) {
-    var PIC_UPLOAD_URL = '/api/rest/img/upload';
-    var ORG_PIC_URL_URL = '/api/rest/img/original/';
+    var PIC_TRANFORM_URL = '/api/rest/job/start';
+    var CONV_PIC_URL_URL = '/api/rest/img/converted/';
 
     return CoreObject.extend({
         init: ["$http", function ($http) {
             this.$http = $http;
         }],
 
-        uploadOriginalPicture: function(file) {
-            var fd = new FormData();
-            fd.append('file', file);
-            console.log("dsakjfhdksajhfkjdashjkf");
+        startTransformJob: function(data) {
             return this.$http({
                 method: 'POST',
-                url: PIC_UPLOAD_URL,
-                data: fd,
-                headers: {
-                        'Content-Type': undefined
-                    }
+                url: PIC_TRANFORM_URL,
+                data: data
             }).then(
                 function success(response) {
                     return response.data.message;
                 }.bind(this),
-                function error() {
-                    console.log("Failed to upload picture.")
+                function error(errorResponse) {
+                    console.log("Failed to start tranformation.");
                     return false;
                 }.bind(this)
             );
         },
 
-        getOrgPicUrl: function(id) {
+        getConvertedPicUrl: function(id) {
             return this.$http({
                 method: 'GET',
-                url: ORG_PIC_URL_URL + id
+                url: PIC_URL_URL + id
             }).then(
                 function success(response) {
                     return response.data.message;
