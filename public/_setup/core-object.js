@@ -1,18 +1,17 @@
-define([
-], function() {
-  'use strict';  
+define([], function () {
+  'use strict';
   var env = (typeof window !== 'undefined' && window) ||
-          (typeof process !== 'undefined' && process.env) ||
-          {};
+    (typeof process !== 'undefined' && process.env) ||
+    {};
 
-  function deprecation (msg) {
-                  if (env.CORE_OBJECT_WARN_DEPRECATED) {
-                    var error = new Error();
-                    var stack = error.stack.split(/\n/);
-                    var source = stack[3];
-                    console.warn('Deprecation: ' + msg + '\n' + source);
-                  }
-                };
+  function deprecation(msg) {
+    if (env.CORE_OBJECT_WARN_DEPRECATED) {
+      var error = new Error();
+      var stack = error.stack.split(/\n/);
+      var source = stack[3];
+      console.warn('Deprecation: ' + msg + '\n' + source);
+    }
+  };
 
   // var assignProperties = require('./lib/assign-properties');
   function setPrototypeOf(obj, proto) {
@@ -24,15 +23,16 @@ define([
   }
 
   function giveMethodSuper(superclass, name, fn) {
-    return function() {
+    return function () {
       var superFn;
 
       if (superclass[name]) {
-        superFn = function() {
+        superFn = function () {
           return superclass[name].apply(this, arguments);
-        }
+        };
       } else {
-        superFn = function() {}
+        superFn = function () {
+        };
       }
 
       // #yolo
@@ -40,7 +40,8 @@ define([
       superFn.apply = Function.prototype.apply;
       superFn.call = Function.prototype.call;
       superFn.bind = Function.prototype.bind;
-      superFn[name] = superclass[name] || function() {};
+      superFn[name] = superclass[name] || function () {
+      };
 
       var previous = this._super;
       this._super = superFn;
@@ -50,23 +51,23 @@ define([
     };
   }
 
-  var sourceAvailable = (function() {
+  var sourceAvailable = (function () {
     return this;
   }).toString().indexOf('return this;') > -1;
 
   var hasSuper;
   if (sourceAvailable) {
-    hasSuper = function(fn) {
+    hasSuper = function (fn) {
       if (fn.__hasSuper === undefined) {
-      return fn.__hasSuper = fn.toString().indexOf('_super') > -1;
+        return fn.__hasSuper = fn.toString().indexOf('_super') > -1;
       } else {
-      return fn.__hasSuper;
+        return fn.__hasSuper;
       }
-    }
+    };
   } else {
-    hasSuper = function(target, fn) {
+    hasSuper = function (target, fn) {
       return true;
-    }
+    };
   }
 
   function assignProperties(target, options) {
@@ -85,17 +86,17 @@ define([
 
   // core-object
   function needsNew() {
-    throw new TypeError("Failed to construct: Please use the 'new' operator, this object constructor cannot be called as a function.");
+    throw new TypeError('Failed to construct: Please use the \'new\' operator, this object constructor cannot be called as a function.');
   }
 
   function CoreObject(options) {
     if (!(this instanceof CoreObject)) {
-      needsNew()
+      needsNew();
     }
     this.init(options);
   }
 
-  CoreObject.prototype.init = function(options) {
+  CoreObject.prototype.init = function (options) {
     if (options) {
       for (var key in options) {
         this[key] = options[key];
@@ -103,15 +104,19 @@ define([
     }
   };
 
-  CoreObject.extend = function(options) {
+  CoreObject.extend = function (options) {
     var constructor = this;
 
     function Class() {
       var length = arguments.length;
 
-      if (length === 0)      this.init();
-      else if (length === 1) this.init(arguments[0]);
-      else                   this.init.apply(this, arguments);
+      if (length === 0) {
+        this.init();
+      } else if (length === 1) {
+        this.init(arguments[0]);
+      } else {
+        this.init.apply(this, arguments);
+      }
     }
 
     Class.__proto__ = CoreObject;
@@ -133,26 +138,35 @@ define([
   };
 
   /* global define:true module:true window: true */
-  // if (typeof define === 'function' && define['amd'])      { define(function() { return CoreObject; }); }
-  // if (typeof module !== 'undefined' && module['exports']) { module['exports'] = CoreObject; }
-  // if (typeof window !== 'undefined')                      { window['CoreObject'] = CoreObject; }
+  // if (typeof define === 'function' && define['amd'])      { define(function() { return
+  // CoreObject; }); } if (typeof module !== 'undefined' && module['exports']) { module['exports']
+  // = CoreObject; } if (typeof window !== 'undefined')                      { window['CoreObject']
+  // = CoreObject; }
 
   function shouldCallSuper(fn) {
     // No function, no problem
-    if (!fn) { return false; }
+    if (!fn) {
+      return false;
+    }
 
     // Takes arguments, assume disruptive override
-    if (/^function *\( *[^ )]/.test(fn)) { return false; }
+    if (/^function *\( *[^ )]/.test(fn)) {
+      return false;
+    }
 
     // Calls super already, good to go
-    if (/this\._super\(/.test(fn)) { return false; }
-    if (/this\._super\./.test(fn)) { return false; }
+    if (/this\._super\(/.test(fn)) {
+      return false;
+    }
+    if (/this\._super\./.test(fn)) {
+      return false;
+    }
 
     return true;
   }
 
   function forceSuper(fn) {
-    return function() {
+    return function () {
       this._super.apply(this, arguments);
       fn.apply(this, arguments);
     }

@@ -1,0 +1,14 @@
+
+<div>
+  <img ng-src="{{ctrl.originalPic.url}}" alt="Original Picture"/>
+  <img ng-src="{{ctrl.tempPic.url}}" alt="Template Picture"/>
+</div>
+<div ng-show="ctrl.showInfoBanner">
+  <p>{{ctrl.infoMessage}}</p>
+</div>
+<div>
+  <progress ng-show="ctrl.loading" value="{{ctrl.percentDone}}" max="100"></progress>
+</div>
+<button ng-click="ctrl.startTransform()">BACK</button>
+<button ng-click="ctrl.goToUpload()">BACK</button>
+<button ng-click="ctrl.goToResult()">NEXT</button>
