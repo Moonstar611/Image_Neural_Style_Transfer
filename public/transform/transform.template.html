@@ -1,14 +1,16 @@
-
+<h2>Review Your Picture and Template</h2>
 <div>
-  <img ng-src="{{ctrl.originalPic.url}}" alt="Original Picture"/>
-  <img ng-src="{{ctrl.tempPic.url}}" alt="Template Picture"/>
+  <img ng-src="{{ctrl.originalPic.url}}" alt="Original Picture" style="width:300px; height:auto;"/>
+  <img ng-src="{{ctrl.tempPic.url}}" alt="Template Picture" style="width:300px; height:auto;"/>
 </div>
-<div ng-show="ctrl.showInfoBanner">
+<div ng-show="ctrl.showInfoBanner", ng-class="{'info-error': ctrl.jobFailed, 'info-succeed': ctrl.jobSucceeded}">
   <p>{{ctrl.infoMessage}}</p>
 </div>
 <div>
   <progress ng-show="ctrl.loading" value="{{ctrl.percentDone}}" max="100"></progress>
 </div>
-<button ng-click="ctrl.startTransform()">BACK</button>
-<button ng-click="ctrl.goToUpload()">BACK</button>
-<button ng-click="ctrl.goToResult()">NEXT</button>
+<button class="my-button-transform" ng-click="ctrl.startTransform()" ng-disabled="ctrl.loading">START TRANSFORMATION</button>
+<div class="my-buttons-transform">
+    <button class="my-button-transform" ng-click="ctrl.goToResult()" ng-disabled="!ctrl.jobSucceeded" id="transformright" title="Go To Checkout Your Picture!">SHOW RESULT</button>
+    <button class="my-button-transform" ng-click="ctrl.goToUpload()" ng-disabled="ctrl.loading" id="transformleft" title="Go Back To Upload Your Picture!">BACK</button>
+</div>

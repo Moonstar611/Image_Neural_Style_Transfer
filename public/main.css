@@ -1,0 +1,173 @@
+body{
+    background-color: #000;
+    opacity:1;
+}
+header h1{
+    font-family:"Tangerine",serif;
+    font-size: 72px;
+    text-align: center;
+}
+header h2{
+    font-family:"Indie Flower",serif;
+    font-size: 25px;
+    text-align: center;
+}
+.main-box{
+    background-color: #fff;
+    position:relative;
+    width: 720px;
+    border-radius: 5px;
+    display:table;
+    margin:50px auto auto auto;
+    padding:20px 30px 20px 30px;
+    color:#000;
+}
+footer{
+    padding-top: 20px;
+    text-align: center;
+}
+footer div{
+    color:#fff;
+    font-family: "Droid Sans";
+    font-size: 15px;
+}
+footer div a{
+    font-family: "Yellowtail";
+    color:#fff;
+}
+/* .quote-text{
+    text-align: center;
+    font-family: "Spirax";
+    font-size: 32px;
+}
+.quote-text i{
+    font-size: 22px;
+}
+.quote-author{
+    text-align: right;
+    font-family: "Yellowtail";
+    font-size:24px;
+} */
+
+/* Select Page */
+
+/* .my-buttons-select{
+    display:block;
+    margin-top: 30px;
+}
+.my-button-select:hover{
+    opacity:0.8;
+    color:#fff;
+}
+.my-button-select{
+    color:#fff;
+    background-color:#000;
+    padding:8px 16px 8px 16px;
+    border-radius:5px;
+    border:none;
+    cursor: pointer;
+    height:40px;
+    font-family: "Droid Sans";
+    font-size:18px;
+    outline: none;
+}
+.my-button-select:hover{
+    opacity:0.8;
+    color:#fff;
+}
+#selectright{
+    float:right;
+} */
+
+/* Upload Page */
+/* .my-buttons-upload{
+    display:block;
+    margin-top: 30px;
+}
+.my-button-upload:hover{
+    opacity:0.8;
+    color:#fff;
+}
+.my-button-upload{
+    color:#fff;
+    background-color:#000;
+    padding:8px 16px 8px 16px;
+    border-radius:5px;
+    border:none;
+    cursor: pointer;
+    height:40px;
+    font-family: "Droid Sans";
+    font-size:18px;
+    outline: none;
+}
+.my-button-upload:hover{
+    opacity:0.8;
+    color:#fff;
+}
+#uploadright{
+    float:right;
+}
+
+#uploadleft{
+    float:left;
+} */
+/* Transform Page */
+/* .my-buttons-transform{
+    display:block;
+    margin-top: 30px;
+}
+.my-button-transform:hover{
+    opacity:0.8;
+    color:#fff;
+}
+.my-button-transform{
+    color:#fff;
+    background-color:#000;
+    padding:8px 16px 8px 16px;
+    border-radius:5px;
+    border:none;
+    cursor: pointer;
+    height:40px;
+    font-family: "Droid Sans";
+    font-size:18px;
+    outline: none;
+}
+.my-button-transform:hover{
+    opacity:0.8;
+    color:#fff;
+}
+#transformright{
+    float:right;
+}
+
+#transformleft{
+    float:left;
+} */
+/* Result Page */
+/* .my-buttons-result{
+    display:block;
+    margin-top: 30px;
+}
+.my-button-result:hover{
+    opacity:0.8;
+    color:#fff;
+}
+.my-button-result{
+    color:#fff;
+    background-color:#000;
+    padding:8px 16px 8px 16px;
+    border-radius:5px;
+    border:none;
+    cursor: pointer;
+    height:40px;
+    font-family: "Droid Sans";
+    font-size:18px;
+    outline: none;
+}
+.my-button-result:hover{
+    opacity:0.8;
+    color:#fff;
+}
+#resultleft{
+    float:left;
+} */

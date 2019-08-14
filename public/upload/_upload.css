@@ -1,0 +1,31 @@
+.my-buttons-upload{
+    display:block;
+    margin-top: 30px;
+}
+.my-button-upload:hover{
+    opacity:0.8;
+    color:#fff;
+}
+.my-button-upload{
+    color:#fff;
+    background-color:#000;
+    padding:8px 16px 8px 16px;
+    border-radius:5px;
+    border:none;
+    cursor: pointer;
+    height:40px;
+    font-family: "Droid Sans";
+    font-size:18px;
+    outline: none;
+}
+.my-button-upload:hover{
+    opacity:0.8;
+    color:#fff;
+}
+#uploadright{
+    float:right;
+}
+
+#uploadleft{
+    float:left;
+}

@@ -5,6 +5,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
         this.$state = $state;
         this.localStorage = localStorage;
         this.convertedPic = this.loadConvertedPic();
+        this.showResult = !!this.convertedPic.id;
       }],
   
       loadConvertedPic: function () {
@@ -18,6 +19,5 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       goToTransform: function () {
         this.$state.go('transform');
       }
-  
     });
   });

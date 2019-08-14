@@ -11,8 +11,10 @@ and open the template in the editor.
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--fonts-->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika|Merriweather+Sans:b|Droid+Sans:b|Yellowtail|Karla:i|Orbitron:b&effect=ice">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine|Indie+Flower|Droid+Sans:b|Yellowtail|Spirax&effect=fire-animation|canvas-print">
   <!--CSS-->
   <link rel="stylesheet" href="/modules/css/bootstrap.min.css">
+  <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <!--JS frameworks-->
   <script type="text/javascript" src="/modules/js/jquery-3.4.1.min.js"></script>
   <script type="text/javascript" src="/modules/js/popper.min.js"></script>
@@ -20,13 +22,25 @@ and open the template in the editor.
   <script type="text/javascript" src="/modules/js/angular.min.js"></script>
   <script type="text/javascript" src="/modules/js/angular-cookies.min.js"></script>
   <script type="text/javascript" src="/modules/js/angular-ui-router.min.js"></script>
-  <script src="https://kit.fontawesome.com/d202565389.js"></script>
-  <script data-main="public/app.js" src="public/require.js"></script>
+  <!-- <script src="https://kit.fontawesome.com/d202565389.js"></script> -->
+  
   <!--my css and js-->
-  <!--        <link rel="stylesheet" href="/public/css/style.css">-->
+  <script data-main="public/app.js" src="public/require.js"></script>
+  <link rel="stylesheet" href="/public/main.css">
+  <link rel="stylesheet" href="/public/select/_select.css">
+  <link rel="stylesheet" href="/public/upload/_upload.css">
+  <link rel="stylesheet" href="/public/transform/_transform.css">
+  <link rel="stylesheet" href="/public/result/_result.css">
 </head>
 <body>
-<div ui-view="main"></div>
+    <header>
+        <br><br><br><br>
+        <h1 class="font-effect-fire-animation"><strong>Image Style Converter</strong></h1>
+        <h2 class="font-effect-canvas-print"><strong>Convert Image To Artifact</strong></h2>
+    </header>
+    <div ui-view="main" class="main-box">
+
+    </div>
 <footer>
   <div>Created by <strong><a href="#" style="text-decoration: none">QIAOCHU WANG</a></strong></div>
 </footer>

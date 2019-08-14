@@ -1,10 +1,15 @@
-<select ng-model="ctrl.curSelectionId">
-  <option ng-repeat="sel in ctrl.selections" value="{{sel.id}}">{{sel.name}}</option>
+<!-- <select ng-model="ctrl.curSelectionId">
+  <option ng-repeat="sel in ctrl.selections" ng-value="{{sel.id}}">{{sel.name}}</option>
+</select> -->
+<h2>Select Your Template Painting</h2>
+<select ng-model="ctrl.curSelectionId" 
+        ng-init="ctrl.curSelectionId = 0"
+        ng-options="sel.id as sel.name for sel in ctrl.selections">
 </select>
 <div ng-repeat="pic in ctrl.selections" ng-show="ctrl.showPic(pic.id)">
-  <img ng-src="{{pic.url}}" alt="{{pic.name}}"/>
+  <img ng-src="{{pic.url}}" alt="{{pic.name}}" style="width:750px; height:auto;"/>
 </div>
-<button
-  type="button"
-  ng-click="ctrl.goToUpload()">NEXT
-</button>
+
+<div class="my-buttons-select">
+    <button class="my-button-select" ng-click="ctrl.goToUpload()" id="selectright" title="Go To Upload Your Picture!">NEXT</button>
+</div>

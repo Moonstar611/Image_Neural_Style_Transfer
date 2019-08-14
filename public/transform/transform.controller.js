@@ -1,12 +1,20 @@
 define(['_setup/angular-core-object'], function (CoreObject) {
-
-  const JOB_PROGRESS_URL = '/api/rest/job/progress/';
-  const EXPECTED_DURATION_SECONDS = 20;
+  const MESSAGES = {
+    TRANSFORM: {
+      START_FAIL: "Encountered problem when starting transformation job.",
+      JOB_FAIL: "Transformation Job failed!",
+      PROGRESS_FAIL: "Failed to retrieve job progress",
+      JOB_SUCCESS: "Successfully transformed picture"
+    },
+    IMAGE: {
+      GET_FAIL: "Failed to get transformed picture with id: ",
+      GET_INFO_FAIL: "Failed to retrieve template picture information or original picture information."
+    }
+  }
 
   return CoreObject.extend({
-    init: ['$state', '$http', '$interval', 'transformService', function ($state, $http, $interval, transformService) {
+    init: ['$state', '$interval', 'transformService', function ($state, $interval, transformService) {
       this.$state = $state;
-      this.$http = $http;
       this.$interval = $interval;
       this.transformService = transformService;
       this.localStorage = localStorage;
@@ -19,12 +27,22 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       this.job_id = 0;
       this.percentDone = 0;
       this.progressIntervalInMilliseconds = 2000;
+      this.jobFailed = false;
+      this.jobSucceeded = false;
     }],
 
     startTransform: function () {
+      this.jobFailed = false;
+      this.jobSucceeded = true;
       this.loading = true;
       this.showInfoBanner = false;
       this.infoMessage = '';
+      if (!this.tempPic.id || !this.originalPic.id) {
+        this.loading = false;
+        this.jobFailed = true;
+        this.infoMessage = MESSAGES.IMAGE.GET_INFO_FAIL;
+        return;
+      }
       var body = {
         type: this.tempPic.id,
         img_id: this.originalPic.id
@@ -39,7 +57,8 @@ define(['_setup/angular-core-object'], function (CoreObject) {
           } else {
             this.loading = false;
             this.showInfoBanner = true;
-            this.infoMessage = "Encountered problem when starting transformation job."
+            this.infoMessage = MESSAGES.TRANSFORM.START_FAIL;
+            this.jobFailed = true;
           }
         }.bind(this)
       );
@@ -49,9 +68,9 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       this.transformService.fetchTransformationProgress(this.job_id).then(
         function success(res) {
           if (!res) {
-            this.stopAndFailedJobProgress("Failed to retrieve job progress!");
+            this.stopAndFailedJobProgress(MESSAGES.TRANSFORM.PROGRESS_FAIL);
           } else if (res.status === 'FAILED') {
-            this.stopAndFailedJobProgress("Transformation Job failed!");
+            this.stopAndFailedJobProgress(MESSAGES.TRANSFORM.JOB_FAIL);
           } else if (res.status === 'RUNNING') {
             this.percentDone = res.progress;
           } else if (res.status === 'FINISHED') {
@@ -64,6 +83,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       if (this.progressPoller) {
         this.$interval.cancel(this.progressPoller);
       }
+      this.jobFailed = true;
       this.showInfoBanner = true;
       this.infoMessage = infoMessage;
       this.percentDone = 0;
@@ -74,20 +94,22 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       if (this.progressPoller) {
         this.$interval.cancel(this.progressPoller);
       }
-      this.percentDone = 100;
-      this.loading = false;
       this.transformService.getConvertedPicUrl(convPicId).then(
         function success(url) {
           if (url) {
             this.convertedPic.id = convPicId;
             this.convertedPic.url = url;
-            this.showInfoBanner = true;
-            this.infoMessage = "Successfully transformed picture";
+            this.percentDone = 100;
+            this.infoMessage = MESSAGES.TRANSFORM.JOB_SUCCESS;
             this.saveConvertedPic();
+            this.jobSucceeded = true;
           } else {
-            this.showInfoBanner = true;
-            this.infoMessage = "Failed to get transformed picture with id: " + convPicId;
+            this.percentDone = 0;
+            this.infoMessage = MESSAGES.IMAGE.GET_FAIL + convPicId;
+            this.jobFailed = true;
           }
+          this.showInfoBanner = true;
+          this.loading = false;
         }.bind(this)
       );
     },
