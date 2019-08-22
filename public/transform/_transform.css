@@ -1,31 +1,78 @@
-.my-buttons-transform{
-    display:block;
-    margin-top: 30px;
-}
-.my-button-transform:hover{
-    opacity:0.8;
-    color:#fff;
-}
-.my-button-transform{
-    color:#fff;
-    background-color:#000;
-    padding:8px 16px 8px 16px;
-    border-radius:5px;
-    border:none;
-    cursor: pointer;
-    height:40px;
-    font-family: "Droid Sans";
-    font-size:18px;
-    outline: none;
-}
-.my-button-transform:hover{
-    opacity:0.8;
-    color:#fff;
-}
-#transformright{
-    float:right;
+.my-buttons-transform {
+  display: block;
+  margin-top: 10px;
 }
 
-#transformleft{
-    float:left;
+.my-button-transform:hover {
+  opacity: 0.8;
+  color: #fff;
 }
+
+.my-button-transform {
+  color: #fff;
+  background-color: #000;
+  padding: 8px 16px 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  height: 40px;
+  font-family: "Droid Sans";
+  font-size: 18px;
+  outline: none;
+}
+
+.my-button-transform:hover {
+  opacity: 0.8;
+  color: #fff;
+}
+
+.my-button-transform:disabled {
+  opacity: 0.5;
+  color: #fff;
+  cursor: default;
+}
+
+.info-error {
+  color: #ffffff;
+  background-color: #ff4b59;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.info-succeed {
+  color: #008000;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+progress {
+  border-radius: 2px;
+  width: 82%;
+  height: 30px;
+}
+
+progress + span {
+  color: #008000;
+  margin-left: 10px;
+  font-family: "Arial Black";
+  font-size: 30px;
+}
+
+#infoBanner, #progressBar {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 40px;
+}
+
+#transformright {
+  float: right;
+}
+
+#transformleft {
+  float: left;
+}
+
+#uploadbtn {
+  margin-top: 10px
+}
+

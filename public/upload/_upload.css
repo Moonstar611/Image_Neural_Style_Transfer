@@ -1,31 +1,89 @@
-.my-buttons-upload{
-    display:block;
-    margin-top: 30px;
-}
-.my-button-upload:hover{
-    opacity:0.8;
-    color:#fff;
-}
-.my-button-upload{
-    color:#fff;
-    background-color:#000;
-    padding:8px 16px 8px 16px;
-    border-radius:5px;
-    border:none;
-    cursor: pointer;
-    height:40px;
-    font-family: "Droid Sans";
-    font-size:18px;
-    outline: none;
-}
-.my-button-upload:hover{
-    opacity:0.8;
-    color:#fff;
-}
-#uploadright{
-    float:right;
+input.upload {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 
-#uploadleft{
-    float:left;
+input.upload + label {
+  color: #40aaff;
+  background-color: #ffffff;
+  padding: 8px 16px 8px 16px;
+  border-radius: 5px;
+  border: 1px solid #40aaff;
+  cursor: pointer;
+  height: 40px;
+  font-family: "Droid Sans";
+  font-size: 18px;
+  outline: none;
+  cursor: pointer;
+  width: 70%;
+}
+
+input.upload + label:hover {
+  color: #ff4b59;
+}
+
+button.upload {
+  color: #fff;
+  background-color: #40aaff;
+  padding: 8px 16px 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  height: 40px;
+  font-family: "Droid Sans";
+  font-size: 18px;
+  outline: none;
+  cursor: pointer;
+  width: 30%;
+}
+
+button.upload:hover {
+  opacity: 0.8;
+  color: #fff;
+}
+
+.my-buttons-upload {
+  display: block;
+  margin-top: 30px;
+}
+
+.my-button-upload:hover {
+  opacity: 0.8;
+  color: #fff;
+}
+
+.my-button-upload {
+  color: #fff;
+  background-color: #000;
+  padding: 8px 16px 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  height: 40px;
+  font-family: "Droid Sans";
+  font-size: 18px;
+  outline: none;
+}
+
+.my-button-upload:hover {
+  opacity: 0.8;
+  color: #fff;
+}
+
+.my-button-upload:disabled {
+  opacity: 0.5;
+  color: #fff;
+  cursor: default;
+}
+
+#uploadright {
+  float: right;
+}
+
+#uploadleft {
+  float: left;
 }

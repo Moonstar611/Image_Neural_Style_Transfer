@@ -11,8 +11,12 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       this.uploadService = uploadService;
       this.showLoadingBar = false;
       this.showInfoBanner = false;
-      this.infoMessage = "";
+      this.infoMessage = '';
       this.originalPic = this.loadOrgPic();
+      this.labelMessage = 'Select A Image ...';
+      this.$scope.SelectFile = function (e) {
+        this.labelMessage = e.target.files[0].name;
+      }.bind(this);
       if (!!this.originalPic.id) {
         // var orgPicUrlPromise = this.uploadService.getOrgPicUrl(this.originalPic.id);
         // orgPicUrlPromise.then(
@@ -38,7 +42,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       console.dir(file);
       this.showLoadingBar = true;
       this.showInfoBanner = false;
-      this.infoMessage = "";
+      this.infoMessage = '';
       var uploadPromise = this.uploadService.uploadOriginalPicture(file);
       uploadPromise.then(
         function success(id) {
@@ -60,7 +64,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
             this.originalPic = {id: 0, url: ''};
             this.showPicPreview = false;
             this.showInfoBanner = true;
-            this.infoMessage = "Failed to upload the selected picture."
+            this.infoMessage = 'Failed to upload the selected picture.';
           }
         }.bind(this)
       );

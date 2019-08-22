@@ -38,16 +38,16 @@ define(['_setup/angular-core-object'], function (CoreObject) {
         }.bind(this)
       );
     },
-  //   self.job_id = job_id
-  // self.status = status
-  // self.progress = progress
-  // self.converted_image_id = conv_img_id
+    //   self.job_id = job_id
+    // self.status = status
+    // self.progress = progress
+    // self.converted_image_id = conv_img_id
 
-  //   class JobStatus(object):
-  // NOT_STARTED = 'NOT STARTED'
-  // RUNNING = 'RUNNING'
-  // FINISHED = 'FINISHED'
-  // FAILED = 'FAILED'
+    //   class JobStatus(object):
+    // NOT_STARTED = 'NOT STARTED'
+    // RUNNING = 'RUNNING'
+    // FINISHED = 'FINISHED'
+    // FAILED = 'FAILED'
 
     fetchTransformationProgress: function (job_id) {
       return this.$http({

@@ -17,17 +17,17 @@ define(['./upload.controller', './upload.service'], function (UploadController, 
       };
     })
     .controller(moduleName + '.UploadController', UploadController);
-    Upload.config(function ($stateProvider) {
-      $stateProvider.state('upload', {
-        url: '/upload',
-        views: {
-          'main@': {
-            templateUrl: '/public/upload/upload.template.html',
-            controller: moduleName + '.UploadController',
-            controllerAs: 'ctrl'
-          }
+  Upload.config(function ($stateProvider) {
+    $stateProvider.state('upload', {
+      url: '/upload',
+      views: {
+        'main@': {
+          templateUrl: '/public/upload/upload.template.html',
+          controller: moduleName + '.UploadController',
+          controllerAs: 'ctrl'
         }
-      });
+      }
     });
-    return Upload;
+  });
+  return Upload;
 });

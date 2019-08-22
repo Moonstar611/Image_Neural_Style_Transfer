@@ -1,13 +1,14 @@
-<h2>Upload Your Original Picture</h2>
-<input class="my-button-upload" type="file" file-model="myFile"/>
-<button class="my-button-upload" ng-click="ctrl.upload()">upload me</button>
+<h2 class="custom">Upload Your Original Picture</h2>
+<input class="upload" id="file" type="file" file-model="myFile" onchange="angular.element(this).scope().SelectFile(event)"/>
+<label for="file">{{ctrl.labelMessage}}</label>
+<button class="upload" ng-click="ctrl.upload()">Upload Me</button>
 <div ng-if="ctrl.showPicPreview">
-  <img ng-src="{{ctrl.originalPic.url}}" alt="Preview" style="width:750px; height:auto;"/>
+  <img class="custom-img" ng-src="{{ctrl.originalPic.url}}" alt="Preview" style="width:750px; height:auto;"/>
 </div>
-<div ng-show="ctrl.showInfoBanner", ng-class="{'info-error': ctrl.jobFailed, 'info-succeed': ctrl.jobSucceeded}">
-    <p>{{ctrl.infoMessage}}</p>
+<div ng-show="ctrl.showInfoBanner" ng-class="{'info-error': ctrl.jobFailed, 'info-succeed': ctrl.jobSucceeded}">
+  <p>{{ctrl.infoMessage}}</p>
 </div>
 <div class="my-buttons-upload">
-    <button class="my-button-upload" ng-click="ctrl.goToTransform()" ng-disabled="!ctrl.showPicPreview" id="uploadright" title="Go To Transform Your Picture!">NEXT</button>
-    <button class="my-button-upload" ng-click="ctrl.goToSelect()" id="uploadleft" title="Go Back To Select Your Template!">BACK</button>
+  <button class="my-button-upload" ng-click="ctrl.goToTransform()" ng-disabled="!ctrl.showPicPreview" id="uploadright" title="Go To Transform Your Picture!">NEXT</button>
+  <button class="my-button-upload" ng-click="ctrl.goToSelect()" id="uploadleft" title="Go Back To Select Your Template!">BACK</button>
 </div>

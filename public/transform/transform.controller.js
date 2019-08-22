@@ -1,16 +1,16 @@
 define(['_setup/angular-core-object'], function (CoreObject) {
   const MESSAGES = {
     TRANSFORM: {
-      START_FAIL: "Encountered problem when starting transformation job.",
-      JOB_FAIL: "Transformation Job failed!",
-      PROGRESS_FAIL: "Failed to retrieve job progress",
-      JOB_SUCCESS: "Successfully transformed picture"
+      START_FAIL: 'Encountered problem when starting transformation job.',
+      JOB_FAIL: 'Transformation Job failed!',
+      PROGRESS_FAIL: 'Failed to retrieve job progress',
+      JOB_SUCCESS: 'Successfully transformed your image, click SHOW RESULT to checkout the result'
     },
     IMAGE: {
-      GET_FAIL: "Failed to get transformed picture with id: ",
-      GET_INFO_FAIL: "Failed to retrieve template picture information or original picture information."
+      GET_FAIL: 'Failed to get transformed picture with id: ',
+      GET_INFO_FAIL: 'Failed to retrieve template picture information or original picture information.'
     }
-  }
+  };
 
   return CoreObject.extend({
     init: ['$state', '$interval', 'transformService', function ($state, $interval, transformService) {
@@ -33,7 +33,6 @@ define(['_setup/angular-core-object'], function (CoreObject) {
 
     startTransform: function () {
       this.jobFailed = false;
-      this.jobSucceeded = true;
       this.loading = true;
       this.showInfoBanner = false;
       this.infoMessage = '';
@@ -64,7 +63,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       );
     },
 
-    fetchTransformationProgress: function() {
+    fetchTransformationProgress: function () {
       this.transformService.fetchTransformationProgress(this.job_id).then(
         function success(res) {
           if (!res) {
@@ -79,7 +78,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
         }.bind(this));
     },
 
-    stopAndFailedJobProgress: function(infoMessage) {
+    stopAndFailedJobProgress: function (infoMessage) {
       if (this.progressPoller) {
         this.$interval.cancel(this.progressPoller);
       }
@@ -89,8 +88,8 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       this.percentDone = 0;
       this.loading = false;
     },
-    
-    stopAndSuccess: function(convPicId) {
+
+    stopAndSuccess: function (convPicId) {
       if (this.progressPoller) {
         this.$interval.cancel(this.progressPoller);
       }

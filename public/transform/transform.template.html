@@ -1,16 +1,17 @@
-<h2>Review Your Picture and Template</h2>
+<h2 class="custom">Review Your Picture and Template</h2>
 <div>
-  <img ng-src="{{ctrl.originalPic.url}}" alt="Original Picture" style="width:300px; height:auto;"/>
-  <img ng-src="{{ctrl.tempPic.url}}" alt="Template Picture" style="width:300px; height:auto;"/>
+  <img class="custom-img" ng-src="{{ctrl.originalPic.url}}" alt="Original Picture" style="width:320px; height:auto;"/>
+  <img class="custom-img" ng-src="{{ctrl.tempPic.url}}" alt="Template Picture" style="width:320px; height:auto;"/>
 </div>
-<div ng-show="ctrl.showInfoBanner", ng-class="{'info-error': ctrl.jobFailed, 'info-succeed': ctrl.jobSucceeded}">
-  <p>{{ctrl.infoMessage}}</p>
+<div ng-show="ctrl.showInfoBanner" ng-class="{'info-error': ctrl.jobFailed, 'info-succeed': ctrl.jobSucceeded}" id="infoBanner">
+  <p><b>{{ctrl.infoMessage}}</b></p>
 </div>
-<div>
-  <progress ng-show="ctrl.loading" value="{{ctrl.percentDone}}" max="100"></progress>
+<div ng-show="ctrl.loading" id="progressBar">
+  <progress value="{{ctrl.percentDone}}" data-label="{{ctrl.percentDone}}" max="100"></progress>
+  <span>{{ctrl.percentDone}}%</span>
 </div>
-<button class="my-button-transform" ng-click="ctrl.startTransform()" ng-disabled="ctrl.loading">START TRANSFORMATION</button>
+<button id="uploadbtn" class="btn btn-info btn-block" ng-click="ctrl.startTransform()" ng-disabled="ctrl.loading" ng-show="!ctrl.jobSucceeded">START TRANSFORMATION</button>
 <div class="my-buttons-transform">
-    <button class="my-button-transform" ng-click="ctrl.goToResult()" ng-disabled="!ctrl.jobSucceeded" id="transformright" title="Go To Checkout Your Picture!">SHOW RESULT</button>
-    <button class="my-button-transform" ng-click="ctrl.goToUpload()" ng-disabled="ctrl.loading" id="transformleft" title="Go Back To Upload Your Picture!">BACK</button>
+  <button class="my-button-transform" ng-click="ctrl.goToResult()" ng-disabled="!ctrl.jobSucceeded" id="transformright" title="Go To Checkout Your Picture!">SHOW RESULT</button>
+  <button class="my-button-transform" ng-click="ctrl.goToUpload()" ng-disabled="ctrl.loading" id="transformleft" title="Go Back To Upload Your Picture!">BACK</button>
 </div>
