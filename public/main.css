@@ -19,7 +19,7 @@ header h2 {
   background-color: #efefef;
   position: relative;
   width: 720px;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 5px solid black;
   display: table;
   margin: 50px auto auto auto;

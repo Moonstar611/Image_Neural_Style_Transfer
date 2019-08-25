@@ -36,10 +36,11 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       this.loading = true;
       this.showInfoBanner = false;
       this.infoMessage = '';
-      if (!this.tempPic.id || !this.originalPic.id) {
+      if (this.tempPic.id == null || !this.originalPic.id == null) {
         this.loading = false;
         this.jobFailed = true;
         this.infoMessage = MESSAGES.IMAGE.GET_INFO_FAIL;
+        this.showInfoBanner = true;
         return;
       }
       var body = {
@@ -66,7 +67,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
     fetchTransformationProgress: function () {
       this.transformService.fetchTransformationProgress(this.job_id).then(
         function success(res) {
-          if (!res) {
+          if (res === false) {
             this.stopAndFailedJobProgress(MESSAGES.TRANSFORM.PROGRESS_FAIL);
           } else if (res.status === 'FAILED') {
             this.stopAndFailedJobProgress(MESSAGES.TRANSFORM.JOB_FAIL);
@@ -117,7 +118,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       if (this.localStorage.getItem('originalPic')) {
         return JSON.parse(this.localStorage.getItem('originalPic'));
       } else {
-        return {id: 0, url: ''};
+        return {id: null, url: ''};
       }
     },
 
@@ -125,7 +126,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       if (this.localStorage.getItem('tempPicSelection')) {
         return JSON.parse(this.localStorage.getItem('tempPicSelection'));
       } else {
-        return {id: 0, url: ''};
+        return {id: null, url: ''};
       }
     },
 

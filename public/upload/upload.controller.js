@@ -17,30 +17,32 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       this.$scope.SelectFile = function (e) {
         this.labelMessage = e.target.files[0].name;
       }.bind(this);
-      if (!!this.originalPic.id) {
-        // var orgPicUrlPromise = this.uploadService.getOrgPicUrl(this.originalPic.id);
-        // orgPicUrlPromise.then(
-        //     function success(url){
-        //         if (url) {
-        //             this.pic_url = url;
-        //             this.showPicPreview = true;
-        //         } else {
-        //             this.pic_url = "";
-        //             this.showPicPreview = false;
-        //         }
-        //     }.bind(this)
-        // )
-        this.showPicPreview = true;
-      } else {
-        this.showPicPreview = false;
-      }
+      this.jobSucceeded = false;
+      this.jobFailed = false;
+      // if (this.originalPic.id != null) {
+      //   // var orgPicUrlPromise = this.uploadService.getOrgPicUrl(this.originalPic.id);
+      //   // orgPicUrlPromise.then(
+      //   //     function success(url){
+      //   //         if (url) {
+      //   //             this.pic_url = url;
+      //   //             this.showPicPreview = true;
+      //   //         } else {
+      //   //             this.pic_url = "";
+      //   //             this.showPicPreview = false;
+      //   //         }
+      //   //     }.bind(this)
+      //   // )
+      //   this.showPicPreview = true;
+      // } else {
+      //   this.showPicPreview = false;
+      // }
+      this.showPicPreview = this.originalPic.id != null
     }],
 
     upload: function () {
       var file = this.$scope.myFile;
       console.log('file is ');
       console.dir(file);
-      this.showLoadingBar = true;
       this.showInfoBanner = false;
       this.infoMessage = '';
       var uploadPromise = this.uploadService.uploadOriginalPicture(file);
@@ -51,17 +53,24 @@ define(['_setup/angular-core-object'], function (CoreObject) {
             orgPicUrlPromise.then(
               function success(url) {
                 if (url) {
+                  this.jobSucceeded = true;
                   this.originalPic.id = id;
                   this.originalPic.url = url;
                   this.showPicPreview = true;
+                  this.infoMessage = 'Successfully uploaded the selected picture.';
+                  this.showInfoBanner = true;
                 } else {
-                  this.originalPic = {id: 0, url: ''};
+                  this.jobFailed = true;
+                  this.originalPic = {id: null, url: ''};
                   this.showPicPreview = false;
+                  this.showInfoBanner = true;
+                  this.infoMessage = 'Failed to upload the selected picture.';
                 }
               }.bind(this)
             );
           } else {
-            this.originalPic = {id: 0, url: ''};
+            this.jobFailed = true;
+            this.originalPic = {id: null, url: ''};
             this.showPicPreview = false;
             this.showInfoBanner = true;
             this.infoMessage = 'Failed to upload the selected picture.';
@@ -78,7 +87,7 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       if (this.localStorage.getItem('originalPic')) {
         return JSON.parse(this.localStorage.getItem('originalPic'));
       } else {
-        return {id: 0, url: ''};
+        return {id: null, url: ''};
       }
     },
 

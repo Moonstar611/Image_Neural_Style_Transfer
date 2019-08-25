@@ -13,7 +13,6 @@ from job_management import get_job_manager
 def register(app: Flask):
 
     job_manager = get_job_manager(jrs, oirs, cirs)
-    print("????")
     @app.route('/api/rest/img/upload', methods=['POST'])
     def upload_original_img():
         """

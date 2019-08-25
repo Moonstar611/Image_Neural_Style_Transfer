@@ -1,8 +1,14 @@
 import threading
 import time
 
-from models.db_models import Job, Image
+from PIL import Image
+
+from models.db_models import Job, ImageModel
 from repo_management import _JobRepoService, _ImageRepoService
+from helpers import FileNameUtils
+from converter_engine.image_converter import ImageConverter
+import app_constants
+import os
 
 
 class _JobManager(object):
@@ -29,9 +35,10 @@ class _JobManager(object):
     def start_job(self, job_id):
         job = self.job_repo_svc.find_job_by_id(job_id)
         image = self.org_img_repo_svc.find_image_by_id(job.original_image_id)
-        conv_job = _ConversionJob(job, image)
+        conv_job = _ConversionJob(job, image, self.conv_img_repo_svc)
         self._running_jobs_map[conv_job.id] = conv_job
         conv_job.start()
+        self.job_repo_svc.update_job_status(job_id, Job.JobStatus.RUNNING)
 
 
 class _ProgressListener(threading.Thread):
@@ -51,13 +58,15 @@ class _ProgressListener(threading.Thread):
                 status = conversion_job.status
                 self.job_repo_svc.update_job_status(job_id, status)
                 if status == Job.JobStatus.RUNNING:
-                    progress = self.job_repo_svc.find_job_by_id(job_id).progress + 3
-                    self.job_repo_svc.update_job_progress(job_id, progress)
+                    progress = conversion_job.converter.cur_iter * 100 / conversion_job.converter.iteration
+                    self.job_repo_svc.update_job_progress(job_id, int(progress))
                 elif status == Job.JobStatus.FAILED:
+                    self.job_repo_svc.update_job_status(job_id, Job.JobStatus.FAILED)
                     need_to_delete = job_id
                     break
                 elif status == Job.JobStatus.FINISHED:
                     self.job_repo_svc.update_job_progress(job_id, 100)
+                    self.job_repo_svc.update_job_status(job_id, Job.JobStatus.FINISHED)
                     self.job_repo_svc.update_job_conv_img(job_id, conversion_job.converted_image_id)
                     need_to_delete = job_id
                     break
@@ -71,26 +80,38 @@ class _ProgressListener(threading.Thread):
 
 class _ConversionJob(threading.Thread):
 
-    def __init__(self, job: Job, org_image: Image):
+    def __init__(self, job: Job, org_image: ImageModel, conv_img_repo_svc: _ImageRepoService):
         super(_ConversionJob, self).__init__()
         self.job = job
         self.org_image = org_image
         self.id = job.job_id
         self.converted_image_id = None
+        self.conv_img_repo_svc = conv_img_repo_svc
         self.status = job.status
+        self.gen_file_name = FileNameUtils.generate_file_name('generated.jpg')
+        self.gen_file_path = os.path.abspath(FileNameUtils.converted_image_path(self.gen_file_name))
+        content_path = os.path.abspath(FileNameUtils.original_image_path(self.org_image.name))
+        style_path = os.path.abspath(app_constants.IMAGE_STYLE_MAP[self.job.type])
+        self.converter = ImageConverter(content_path, style_path)
 
     def run(self):
+
         self.status = Job.JobStatus.RUNNING
-        # # TODO:
-        # try:
-        #     pass
-        # except:
-        #     self.status = Job.JobStatus.FAILED
-        # self.converted_image = ''
+
+        try:
+            print("Started")
+            converted_image = self.converter.run_style_transfer()
+            im = Image.fromarray(converted_image)
+            im.save(self.gen_file_path)
+            self.converted_image_id = self.conv_img_repo_svc.add_new_image_file(self.gen_file_name)
+            self.status = Job.JobStatus.FINISHED
+        except BaseException as e:
+            print("Job exception encountered")
+            print(e)
+            self.status = Job.JobStatus.FAILED
+        # time.sleep(30)
         # self.status = Job.JobStatus.FINISHED
-        time.sleep(30)
-        self.status = Job.JobStatus.FINISHED
-        self.converted_image_id = 1
+        # self.converted_image_id = 1
 
 
 def get_job_manager(job_repo_svc, org_img_repo_svc, conv_img_repo_svc):

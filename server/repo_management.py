@@ -2,7 +2,7 @@ import json
 import os
 
 from helpers import _JSONEncoder
-from models.db_models import ImageRepo, JobRepo, Image, Job
+from models.db_models import ImageRepo, JobRepo, ImageModel, Job
 
 ORG_IMG_REPO_DIR = os.path.join('../storage/', 'org_img_repo.json')
 CONV_IMG_REPO_DIR = os.path.join('../storage/', 'conv_img_repo.json')
@@ -33,7 +33,7 @@ class _ImageRepoService(object):
         return image_id
 
     def add_new_image_file(self, filename):
-        image = Image(filename)
+        image = ImageModel(filename)
         image_id = self.add_image(image)
         return image_id
 

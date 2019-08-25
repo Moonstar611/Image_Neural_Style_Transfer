@@ -4,7 +4,7 @@ import datetime
 class ImageRepo(object):
 
     def __init__(self, json_obj):
-        self.images = [Image.create_image_from_json(o) for o in json_obj['images']]  # type: list
+        self.images = [ImageModel.create_image_from_json(o) for o in json_obj['images']]  # type: list
         self.time = json_obj['time']
 
     def add_image(self, new_image):
@@ -52,7 +52,7 @@ class ImageRepo(object):
         return image_ids[-1] + 1
 
 
-class Image(object):
+class ImageModel(object):
 
     def __init__(self, img_name, image_id=None, job_id=None):
         self.name = img_name
@@ -61,7 +61,7 @@ class Image(object):
 
     @staticmethod
     def create_image_from_json(json_obj):
-        return Image(json_obj['name'], json_obj['image_id'], json_obj['job_id'])
+        return ImageModel(json_obj['name'], json_obj['image_id'], json_obj['job_id'])
 
 
 class JobRepo(object):
@@ -116,10 +116,10 @@ class JobRepo(object):
 
 class Job(object):
     class JobType(object):
-        TYPE_1 = '1'
-        TYPE_2 = '2'
-        TYPE_3 = '3'
-        TYPE_4 = '4'
+        TYPE_1 = '0'
+        TYPE_2 = '1'
+        TYPE_3 = '2'
+        TYPE_4 = '3'
 
     class JobStatus(object):
         NOT_STARTED = 'NOT STARTED'
