@@ -1,35 +1,20 @@
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-
-mpl.rcParams['figure.figsize'] = (10, 10)
-mpl.rcParams['axes.grid'] = False
-
 import numpy as np
-from PIL import Image
-import time
-import functools
-
 import tensorflow as tf
 import tensorflow.contrib.eager as tfe
 from tensorflow.python.keras.preprocessing import image as kp_image
 from tensorflow.python.keras import models
-from tensorflow.python.keras import losses
-from tensorflow.python.keras import layers
-from tensorflow.python.keras import backend as K
+from PIL import Image
 
 
 class ImageConverter(object):
 
-    def __init__(self, content_path, style_path, iteration=10, max_dim=512):
-        # style: 1, 2, 3, 4, 5
+    def __init__(self, content_path, style_path, iteration=30, max_dim=512):
         self.content_path = content_path
         self.style_path = style_path
         self.iteration = iteration
         self.cur_iter = 0
         self.max_dim = max_dim
-        # Content layer where will pull our feature maps
         self.content_layers = ['block5_conv2']
-        # Style layer we are interested in
         self.style_layers = ['block1_conv1',
                              'block2_conv1',
                              'block3_conv1',
@@ -38,7 +23,7 @@ class ImageConverter(object):
                              ]
         self.num_content_layers = len(self.content_layers)
         self.num_style_layers = len(self.style_layers)
-        tf.enable_eager_execution()
+        tf.compat.v1.enable_eager_execution()
 
     def _load_and_process_img(self, img_path):
         img = Image.open(img_path)
@@ -95,7 +80,7 @@ class ImageConverter(object):
         return models.Model(vgg.input, model_outputs)
 
     # content loss: pass the network both the desired content image and our base input image
-    def get_content_loss(self, base_content, target):
+    def content_loss(self, base_content, target):
         return tf.reduce_mean(tf.square(base_content - target))
 
     # style loss: network the base input image and the style image
@@ -107,7 +92,7 @@ class ImageConverter(object):
         gram = tf.matmul(a, a, transpose_a=True)
         return gram / tf.cast(n, tf.float32)
 
-    def get_style_loss(self, base_style, gram_target):
+    def style_loss(self, base_style, gram_target):
         """Expects two images of dimension h, w, c"""
         # height, width, num filters of each layer
         # We scale the loss at a given layer by the size of the feature map and the number of filters
@@ -117,7 +102,7 @@ class ImageConverter(object):
         return tf.reduce_mean(tf.square(gram_style - gram_target))
 
     # run gradient descent
-    def get_feature_representations(self, model, content_path, style_path):
+    def run_gradient_descent(self, model, content_path, style_path):
         """Helper function to compute our content and style feature representations.
 
         This function will simply load and preprocess both the content and style
@@ -147,9 +132,6 @@ class ImageConverter(object):
     # compute the loss and gradients
     def compute_loss(self, model, loss_weights, init_image, gram_style_features, content_features):
         style_weight, content_weight = loss_weights
-        # Feed our init image through our model. This will give us the content and
-        # style representations at our desired layers. Since we're using eager
-        # our model is callable just like any other function!
         model_outputs = model(init_image)
 
         style_output_features = model_outputs[:self.num_style_layers]
@@ -162,12 +144,12 @@ class ImageConverter(object):
         # Here, we equally weight each contribution of each loss layer
         weight_per_style_layer = 1.0 / float(self.num_style_layers)
         for target_style, comb_style in zip(gram_style_features, style_output_features):
-            style_score += weight_per_style_layer * self.get_style_loss(comb_style[0], target_style)
+            style_score += weight_per_style_layer * self.style_loss(comb_style[0], target_style)
 
         # Accumulate content losses from all layers
         weight_per_content_layer = 1.0 / float(self.num_content_layers)
         for target_content, comb_content in zip(content_features, content_output_features):
-            content_score += weight_per_content_layer * self.get_content_loss(comb_content[0], target_content)
+            content_score += weight_per_content_layer * self.content_loss(comb_content[0], target_content)
 
         style_score *= style_weight
         content_score *= content_weight
@@ -187,29 +169,21 @@ class ImageConverter(object):
     def run_style_transfer(self,
                            content_weight=1e3,
                            style_weight=1e-2):
-        # We don't need to (or want to) train any layers of our model, so we set their
-        # trainable to false.
         model = self._get_model()
         for layer in model.layers:
             layer.trainable = False
 
         # Get the style and content feature representations (from our specified intermediate layers)
-        style_features, content_features = self.get_feature_representations(model, self.content_path, self.style_path)
+        style_features, content_features = self.run_gradient_descent(model, self.content_path, self.style_path)
         gram_style_features = [self.gram_matrix(style_feature) for style_feature in style_features]
 
         # Set initial image
         init_image = self._load_and_process_img(self.content_path)
         init_image = tfe.Variable(init_image, dtype=tf.float32)
         # Create our optimizer
-        opt = tf.train.AdamOptimizer(learning_rate=5, beta1=0.99, epsilon=1e-1)
-
-        # For displaying intermediate images
-        # iter_count = 1
-
+        opt = tf.compat.v1.train.AdamOptimizer(learning_rate=5, beta1=0.99, epsilon=1e-1)
         # Store our best result
         best_loss, best_img = float('inf'), None
-
-        # Create a nice config
         loss_weights = (style_weight, content_weight)
         cfg = {
             'model': model,
@@ -223,9 +197,6 @@ class ImageConverter(object):
         num_rows = 2
         num_cols = 5
         display_interval = self.iteration / (num_rows * num_cols)
-        start_time = time.time()
-        global_start = time.time()
-
         norm_means = np.array([103.939, 116.779, 123.68])
         min_vals = -norm_means
         max_vals = 255 - norm_means
@@ -239,7 +210,6 @@ class ImageConverter(object):
             opt.apply_gradients([(grads, init_image)])
             clipped = tf.clip_by_value(init_image, min_vals, max_vals)
             init_image.assign(clipped)
-            end_time = time.time()
 
             if loss < best_loss:
                 # Update best loss and best image from total loss.
@@ -247,21 +217,9 @@ class ImageConverter(object):
                 best_img = ImageConverter._deprocess_img(init_image.numpy())
 
             if i % display_interval == 0:
-                start_time = time.time()
-
                 # Use the .numpy() method to get the concrete numpy array
                 plot_img = init_image.numpy()
                 plot_img = ImageConverter._deprocess_img(plot_img)
                 imgs.append(plot_img)
 
         return best_img
-
-    @staticmethod
-    def show_results(best_img):
-        plt.figure(figsize=(10, 10))
-        plt.imshow(best_img)
-        plt.title('Output Image')
-        plt.show()
-
-# converter = ImageConverter("dfad", 1)
-# img = converter.run_style_transfer()
