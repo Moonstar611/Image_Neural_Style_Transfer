@@ -79,6 +79,10 @@ define(['_setup/angular-core-object'], function (CoreObject) {
       );
     },
 
+    uploadEnable: function () {
+      return !!this.$scope.myFile
+    },
+
     saveOrgPic: function () {
       this.localStorage.setItem('originalPic', JSON.stringify(this.originalPic));
     },

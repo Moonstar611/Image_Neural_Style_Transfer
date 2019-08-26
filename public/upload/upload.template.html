@@ -1,7 +1,7 @@
 <h2 class="custom">Upload Your Original Picture</h2>
 <input class="upload" id="file" type="file" file-model="myFile" onchange="angular.element(this).scope().SelectFile(event)"/>
 <label for="file">{{ctrl.labelMessage}}</label>
-<button class="upload" ng-click="ctrl.upload()">Upload Me</button>
+<button class="upload" ng-disabled="!ctrl.uploadEnable()" ng-click="ctrl.upload()">Upload Me</button>
 <div ng-if="ctrl.showPicPreview">
   <img class="custom-img" ng-src="{{ctrl.originalPic.url}}" alt="Preview" style="width:750px; height:auto;"/>
 </div>
